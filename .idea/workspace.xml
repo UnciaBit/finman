@@ -12,24 +12,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92809c38-70d8-4d7d-a818-adf4640c682c" name="Changes" comment="Updated .gitignore">
-      <change afterPath="$PROJECT_DIR$/config.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/identifier.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-3523439cde26564bf476.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2022-01-11T14-07-34-0516.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/target-finman-Debug-fb18ed981b4b24dd44da.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/build.ninja" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-make/.cmake/api/v1/reply/codemodel-v2-e70fd7750f513621128c.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-make/.cmake/api/v1/reply/index-2022-01-11T14-07-34-0514.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-make/.cmake/api/v1/reply/target-finman-Release-74e0b007429eba9f84ab.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-make/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-make/build.ninja" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+    <list default="true" id="92809c38-70d8-4d7d-a818-adf4640c682c" name="Changes" comment="Added global variable for exchange rates api">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -140,7 +124,7 @@
       <option name="presentableId" value="Default" />
       <updated>1641902303686</updated>
       <workItem from="1641902305904" duration="9772000" />
-      <workItem from="1641973143022" duration="3189000" />
+      <workItem from="1641973143022" duration="3401000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1641903917188</created>
@@ -163,7 +147,14 @@
       <option name="project" value="LOCAL" />
       <updated>1641910235402</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added global variable for exchange rates api">
+      <created>1641977914126</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1641977914126</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -185,7 +176,8 @@
     <MESSAGE value="Initial Commit" />
     <MESSAGE value="Working SQLite connection" />
     <MESSAGE value="Updated .gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated .gitignore" />
+    <MESSAGE value="Added global variable for exchange rates api" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added global variable for exchange rates api" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

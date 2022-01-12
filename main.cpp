@@ -22,8 +22,6 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
 
 int openDatabase(){
 
-    char *sql;
-
     rc = sqlite3_open("test.db", &db);
 
     if( rc ) {
@@ -46,7 +44,7 @@ int createTable(){
     labelQuery = "CREATE TABLE IF NOT EXISTS label (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, labelTitle TEXT UNIQUE, currency TEXT, balance DOUBLE)";
     transactionQuery = "CREATE TABLE IF NOT EXISTS transactions (id INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL, label_id INTEGER  REFERENCES label (id) ON UPDATE CASCADE NOT NULL, action INT NOT NULL, amount DOUBLE NOT NULL DEFAULT (0), totalAfter  DOUBLE NOT NULL, datetime DATETIME NOT NULL,description TEXT)";
 
-    rc = sqlite3_exec(db, labelQuery, callback, 0, &zErrMsg);
+    rc = sqlite3_exec(db, labelQuery, callback, nullptr, &zErrMsg);
     if( rc != SQLITE_OK ){
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
@@ -54,7 +52,7 @@ int createTable(){
 //        fprintf(stdout, "Label Table created successfully\n");
     }
 
-    rc2 = sqlite3_exec(db, transactionQuery, callback, 0, &zErrMsg);
+    rc2 = sqlite3_exec(db, transactionQuery, callback, nullptr, &zErrMsg);
     if( rc2 != SQLITE_OK ){
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
@@ -81,11 +79,13 @@ string runQuery(const string& query){
         const char *errMsg;
         errMsg = sqlite3_errmsg(db);
         sqlite3_free(zErrMsg);
+        sqlite3_close(db);
         return errMsg;
     } else {
+        sqlite3_close(db);
         return "Success";
     }
-    sqlite3_close(db);
+
 }
 
 string currentDateTime(){
@@ -97,8 +97,7 @@ string currentDateTime(){
     auto datetime = oss.str();
 
     return datetime;
-};
-
+}
 
 tuple<int,string,double> labelInfo(const string& label, const int mode) {
     openDatabase();
@@ -117,7 +116,7 @@ tuple<int,string,double> labelInfo(const string& label, const int mode) {
     string title;
 
     sqlite3_stmt *stmt;
-    int rc = sqlite3_prepare_v2(db, query.c_str(), query.length(), &stmt, nullptr);
+    rc = sqlite3_prepare_v2(db, query.c_str(), query.length(), &stmt, nullptr);
     if (rc != SQLITE_OK) {
         const char *errMsg;
         errMsg = sqlite3_errmsg(db);
@@ -206,7 +205,7 @@ int undo(){
     double amount;
 
     sqlite3_stmt *stmt;
-    int rc = sqlite3_prepare_v2(db, query.c_str(), query.length(), &stmt, nullptr);
+    rc = sqlite3_prepare_v2(db, query.c_str(), query.length(), &stmt, nullptr);
     if (rc != SQLITE_OK) {
         const char *errMsg;
         errMsg = sqlite3_errmsg(db);
@@ -223,12 +222,13 @@ int undo(){
     auto [id,labelTitle, balance] = labelInfo(to_string(labelID), 0);
 
     if (action == 0) { //Deposit
-        auto query = "UPDATE label SET balance = " + to_string(balance - amount) + " WHERE id = " + to_string(labelID);
+        query = "UPDATE label SET balance = " + to_string(balance - amount) + " WHERE id = " + to_string(labelID);
         string result = runQuery(query);
         if (result == "Success") {
             auto query2 = "DELETE FROM transactions WHERE id = " + to_string(transactionID);
             string result2 = runQuery(query2);
             if (result2 == "Success") {
+                sqlite3_finalize(stmt);
                 return 0;
             } else {
                 cout << "\nError: " << result2;
@@ -239,12 +239,13 @@ int undo(){
             return 1;
         }
     } else { //Withdraw
-        auto query = "UPDATE label SET balance = " + to_string(balance + amount) + " WHERE id = " + to_string(labelID);
+        query = "UPDATE label SET balance = " + to_string(balance + amount) + " WHERE id = " + to_string(labelID);
         string result = runQuery(query);
         if (result == "Success") {
             auto query2 = "DELETE FROM transactions WHERE id = " + to_string(transactionID);
             string result2 = runQuery(query2);
             if (result2 == "Success") {
+                sqlite3_finalize(stmt);
                 return 0;
             } else {
                 cout << "\nError: " << result2;
@@ -255,13 +256,6 @@ int undo(){
             return 1;
         }
     }
-
-
-
-
-    sqlite3_finalize(stmt);
-    return 0;
-
 }
 
 

@@ -61,6 +61,12 @@ build CMakeFiles/finman.dir/lib/sqlite3.c.obj: C_COMPILER__finman_Debug E$:/02-p
   OBJECT_DIR = CMakeFiles\finman.dir
   OBJECT_FILE_DIR = CMakeFiles\finman.dir\lib
 
+build CMakeFiles/finman.dir/config.cpp.obj: CXX_COMPILER__finman_Debug E$:/02-personal/02-devProjects/02-Cpp/finman/config.cpp || cmake_object_order_depends_target_finman
+  DEP_FILE = CMakeFiles\finman.dir\config.cpp.obj.d
+  FLAGS = -g -std=gnu++14
+  OBJECT_DIR = CMakeFiles\finman.dir
+  OBJECT_FILE_DIR = CMakeFiles\finman.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target finman
@@ -69,7 +75,7 @@ build CMakeFiles/finman.dir/lib/sqlite3.c.obj: C_COMPILER__finman_Debug E$:/02-p
 #############################################
 # Link the executable finman.exe
 
-build finman.exe: CXX_EXECUTABLE_LINKER__finman_Debug CMakeFiles/finman.dir/main.cpp.obj CMakeFiles/finman.dir/lib/sqlite3.c.obj
+build finman.exe: CXX_EXECUTABLE_LINKER__finman_Debug CMakeFiles/finman.dir/main.cpp.obj CMakeFiles/finman.dir/lib/sqlite3.c.obj CMakeFiles/finman.dir/config.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\finman.dir

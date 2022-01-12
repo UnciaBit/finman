@@ -1,30 +1,64 @@
 #include <iostream>
 #include <string>
 #include "lib/sqlite3.h"
+#include "config.h"
 
 using namespace std;
+
+char queryString;
 
 int addBalance(double amount, char *label) {
     cout << "amount: " << amount;
     cout << "string: " << label;
 
+
+
+    return 0;
+}
+
+static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
+    int i;
+    for(i = 0; i<argc; i++) {
+        printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+    }
+    printf("\n");
+    return 0;
+}
+
+int runQuery(char query){
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc;
+    char *sql;
 
     rc = sqlite3_open("test.db", &db);
 
     if( rc ) {
         fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-        return(0);
+        return 1;
     } else {
         fprintf(stderr, "Opened database successfully\n");
     }
-    sqlite3_close(db);
 
+    /* Create SQL statement */
+    sql = "CREATE TABLE IF NOT EXISTS BALANCE " \
+          "(ID INTEGER PRIMARY KEY     AUTOINCREMENT," \
+          " BALANCE           REAL    NOT NULL," \
+          " LABEL             TEXT    NOT NULL);";
+
+    /* Execute SQL statement */
+    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+
+    if( rc != SQLITE_OK ){
+        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    } else {
+        fprintf(stdout, "Table created successfully\n");
+    }
+
+    sqlite3_close(db);
     return 0;
 }
-
 
 int main(int argc, char** argv) {
     // Command line budget calculator
@@ -45,7 +79,11 @@ int main(int argc, char** argv) {
     string action = argv[1];
 
     if (action == "add") {
-        addBalance(stod(argv[2]), argv[3]);
+        try {
+            addBalance(stod(argv[2]), argv[3]);
+        } catch (const exception& e) {
+            cout << "Error: " << e.what() << endl;
+        }
     } else if (action == "sub") {
         cout << "sub" << endl;
     } else if (action == "new") {

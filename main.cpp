@@ -125,17 +125,8 @@ tuple<int, double> labelInfo(const string& labelTitle) {
 
 int deposit(double amount, char *label, const string& description) {
 
-    cout << "\namount: " << amount;
-    cout << "\nstring: " << label;
-    cout << "\ndate time:" << currentDateTime();
-
     string dateTime = currentDateTime();
-
     auto [id, balance] = labelInfo(label);
-
-    cout << "balance: " << balance << endl;
-    cout << "total: " << balance + amount << endl;
-
     double total = balance + amount;
 
     if (description.empty()) {

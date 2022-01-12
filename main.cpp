@@ -102,13 +102,15 @@ string currentDateTime(){
 tuple<int,string,double> labelInfo(const string& label, const int mode) {
     openDatabase();
 
-    //mode: 0 -> search using label_id, 1 -> search using labelTitle
+    //mode: 0 -> search using label_id, 1 -> search using labelTitle, 2 -> search all labels
     string query;
 
     if (mode == 0) {
         query = "SELECT * FROM label WHERE id = " + label;
-    } else {
+    } else if (mode == 1) {
         query = "SELECT * FROM label WHERE labelTitle = '" + label + "'";
+    } else if (mode == 2) {
+        query = "SELECT * FROM label";
     }
 
     double balance;
@@ -124,9 +126,14 @@ tuple<int,string,double> labelInfo(const string& label, const int mode) {
         sqlite3_free(zErrMsg);
     }
     while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
-        balance = sqlite3_column_double(stmt, 3);
-        title = (const char*)sqlite3_column_text(stmt, 1);
-        id = sqlite3_column_int(stmt, 0);
+        if (mode != 2){
+            balance = sqlite3_column_double(stmt, 3);
+            title = (const char*)sqlite3_column_text(stmt, 1);
+            id = sqlite3_column_int(stmt, 0);
+        } else {
+            cout << "Label: " << (const char*)sqlite3_column_text(stmt, 1) << " -> ";
+            cout << "Balance: " << sqlite3_column_double(stmt, 3) << " " << sqlite3_column_text(stmt,2) << endl;
+        }
     }
     sqlite3_finalize(stmt);
     return {id,title,balance};
@@ -309,6 +316,12 @@ int main(int argc, char** argv) {
         cout << "new" << endl;
     } else if (action == "undo") {
         undo();
+    } else if (action == "bal" && argc == 3) {
+        auto [id, labelTitle, balance] = labelInfo(argv[2], 1);
+        cout << balance;
+    } else if (action == "bal" && argc == 2) {
+        // Print all balances
+        labelInfo("", 2);
     } else {
         cout << "Invalid action" << endl;
     }

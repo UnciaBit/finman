@@ -12,8 +12,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92809c38-70d8-4d7d-a818-adf4640c682c" name="Changes" comment="Stop tracking config.cpp">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="92809c38-70d8-4d7d-a818-adf4640c682c" name="Changes" comment="Working label creation and deposit function">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
@@ -130,7 +129,7 @@
       <option name="presentableId" value="Default" />
       <updated>1641902303686</updated>
       <workItem from="1641902305904" duration="9772000" />
-      <workItem from="1641973143022" duration="18057000" />
+      <workItem from="1641973143022" duration="19078000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1641903917188</created>
@@ -167,7 +166,14 @@
       <option name="project" value="LOCAL" />
       <updated>1641978151978</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Working label creation and deposit function">
+      <created>1641994277336</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1641994277336</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -191,7 +197,8 @@
     <MESSAGE value="Updated .gitignore" />
     <MESSAGE value="Added global variable for exchange rates api" />
     <MESSAGE value="Stop tracking config.cpp" />
-    <option name="LAST_COMMIT_MESSAGE" value="Stop tracking config.cpp" />
+    <MESSAGE value="Working label creation and deposit function" />
+    <option name="LAST_COMMIT_MESSAGE" value="Working label creation and deposit function" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

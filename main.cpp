@@ -66,7 +66,7 @@ int createTable(){
     return 0;
 }
 
-int runQuery(const string& query){
+string runQuery(const string& query){
 
     openDatabase();
 
@@ -80,14 +80,12 @@ int runQuery(const string& query){
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         const char *errMsg;
         errMsg = sqlite3_errmsg(db);
-        cout << errMsg << endl;
         sqlite3_free(zErrMsg);
+        return errMsg;
     } else {
-//        fprintf(stdout, "Table created successfully\n");
+        return "Success";
     }
-
     sqlite3_close(db);
-    return 0;
 }
 
 string currentDateTime(){
@@ -125,7 +123,7 @@ tuple<int, double> labelInfo(const string& labelTitle) {
     return {id,balance};
 }
 
-int addBalance(double amount, char *label, const string& description) {
+int deposit(double amount, char *label, const string& description) {
 
     cout << "\namount: " << amount;
     cout << "\nstring: " << label;
@@ -135,25 +133,56 @@ int addBalance(double amount, char *label, const string& description) {
 
     auto [id, balance] = labelInfo(label);
 
-    cout << "\nbalance of " << label << " is " << balance << endl;
-    cout << "\nid of " << label << " is " << id << endl;
+    cout << "balance: " << balance << endl;
+    cout << "total: " << balance + amount << endl;
 
     double total = balance + amount;
 
     if (description.empty()) {
-        cout << "\ndescription is null";
+
         auto query = "INSERT INTO transactions (label_id, action ,amount, totalAfter, datetime) VALUES (" + to_string(id) + ", 0 ," + to_string(amount) + ", " + to_string(total) + ", '" + dateTime + "')";
-        runQuery(query);
+
+        string result = runQuery(query);
+
+        if (result == "Success") {
+
+            auto query2 = "UPDATE label SET balance = " + to_string(total) + " WHERE id = " + to_string(id);
+            string result2 = runQuery(query2);
+
+            if (result2 == "Success") {
+                return 0;
+            } else {
+                cout << "\nError: " << result2;
+                return 1;
+            }
+        } else {
+            cout << "\nError: " << result;
+            return 1;
+        }
+
     } else {
-        cout << "\ndescription: " << description;
+
         auto query = "INSERT INTO transactions (label_id, action ,amount, totalAfter, datetime, description) VALUES (" + to_string(id) + ", 0 ," + to_string(amount) + ", " + to_string(total) + ", '" + dateTime + "', '" + description + "')";
-        runQuery(query);
+
+        string result = runQuery(query);
+
+        if (result == "Success") {
+
+            auto query2 = "UPDATE label SET balance = " + to_string(total) + " WHERE id = " + to_string(id);
+            string result2 = runQuery(query2);
+
+            if (result2 == "Success") {
+                return 0;
+            } else {
+                cout << "\nError: " << result2;
+                return 1;
+            }
+
+        } else {
+            cout << "\nError: " << result;
+            return 1;
+        }
     }
-
-    auto query = "UPDATE label SET balance = " + to_string(total) + " WHERE id = " + to_string(id);
-    runQuery(query);
-
-    return 0;
 }
 
 int newLabel(const string& labelTitle, const string& currency, double balance) {
@@ -202,9 +231,9 @@ int main(int argc, char** argv) {
                 cout << "Enter Description: ";
                 cin.ignore(1, '\n');
                 getline(cin, description);
-                addBalance(stod(argv[2]), argv[3], description);
+                deposit(stod(argv[2]), argv[3], description);
             } else if (option == 'n') {
-                addBalance(stod(argv[2]), argv[3], description);
+                deposit(stod(argv[2]), argv[3], description);
             }
 
         } catch (const exception& e) {

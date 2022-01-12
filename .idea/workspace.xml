@@ -12,8 +12,14 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92809c38-70d8-4d7d-a818-adf4640c682c" name="Changes" comment="Added global variable for exchange rates api">
+    <list default="true" id="92809c38-70d8-4d7d-a818-adf4640c682c" name="Changes" comment="Stop tracking config.cpp">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/test.db" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/test.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,12 +76,12 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="add" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="add 500 smbc" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="finman" TARGET_NAME="finman" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="finman" RUN_TARGET_NAME="finman">
+    <configuration name="add" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="add 500 commbank" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="finman" TARGET_NAME="finman" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="finman" RUN_TARGET_NAME="finman">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="bal1" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="bal ufj" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="finman" TARGET_NAME="finman" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="finman" RUN_TARGET_NAME="finman">
+    <configuration name="bal1" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="bal commbank" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="finman" TARGET_NAME="finman" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="finman" RUN_TARGET_NAME="finman">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -90,12 +96,12 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="new" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="new commbank AUD" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="finman" TARGET_NAME="finman" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="finman" RUN_TARGET_NAME="finman">
+    <configuration name="new" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="new commbank AUD 0" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="finman" TARGET_NAME="finman" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="finman" RUN_TARGET_NAME="finman">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="sub" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="sub 500 ufj" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="finman" TARGET_NAME="finman" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="finman" RUN_TARGET_NAME="finman">
+    <configuration name="sub" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="sub 500 commbank" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="finman" TARGET_NAME="finman" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="finman" RUN_TARGET_NAME="finman">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -124,7 +130,7 @@
       <option name="presentableId" value="Default" />
       <updated>1641902303686</updated>
       <workItem from="1641902305904" duration="9772000" />
-      <workItem from="1641973143022" duration="3401000" />
+      <workItem from="1641973143022" duration="18057000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1641903917188</created>
@@ -154,7 +160,14 @@
       <option name="project" value="LOCAL" />
       <updated>1641977914126</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Stop tracking config.cpp">
+      <created>1641978151978</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1641978151978</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -177,7 +190,8 @@
     <MESSAGE value="Working SQLite connection" />
     <MESSAGE value="Updated .gitignore" />
     <MESSAGE value="Added global variable for exchange rates api" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added global variable for exchange rates api" />
+    <MESSAGE value="Stop tracking config.cpp" />
+    <option name="LAST_COMMIT_MESSAGE" value="Stop tracking config.cpp" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

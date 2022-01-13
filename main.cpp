@@ -318,7 +318,8 @@ int undo(){
     }
 }
 
-int remove(){
+int rm(int mode, int id){
+    // mode = 0 -> label, mode = 1 -> transaction
 
 }
 
@@ -377,6 +378,22 @@ int ls(int mode, const string& labelTitle){
 
 }
 
+int printLabels(){
+    openDatabase();
+    string query = "SELECT * FROM label";
+    sqlite3_stmt *stmt;
+    rc = sqlite3_prepare_v2(db, query.c_str(), query.length(), &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        const char *errMsg;
+        errMsg = sqlite3_errmsg(db);
+        cout << errMsg << endl;
+        sqlite3_free(zErrMsg);
+    }
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        cout << "ID: " << sqlite3_column_int(stmt, 0) << " | " << sqlite3_column_text(stmt, 1) << " | Balance: " << sqlite3_column_double(stmt,3) << " " << sqlite3_column_text(stmt, 2) << endl;
+    }
+    sqlite3_finalize(stmt);
+}
 
 int main(int argc, char** argv) {
     // Command line budget calculator
@@ -391,6 +408,7 @@ int main(int argc, char** argv) {
     // [new] finman new commbank USD 0 -> creates new label 'commbank' with initial balance of 0
     // [bal1] finman bal ufj -> prints balance of label ufj with currency
     // [bal2] finman bal -> prints all balances
+    // [labels] finman labels -> prints all labels
 
     // [undo] finman undo -> undo last transaction
 
@@ -467,6 +485,8 @@ int main(int argc, char** argv) {
 //        remove(argv[2], stoi(argv[3]));
     } else if (action == "conv") {
 
+    } else if (action == "labels") {
+        printLabels();
     } else {
         cout << "Error: Invalid arguments" << endl;
     }

@@ -68,7 +68,7 @@ string runQuery(const string& query){
 
     openDatabase();
 
-    cout << "Received query: " << query << endl;
+//    cout << "Received query: " << query << endl;
 
     char *sql = (char*)query.c_str();
 
@@ -99,7 +99,7 @@ string currentDateTime(){
     return datetime;
 }
 
-tuple<int,string,double> labelInfo(const string& label, const int mode) {
+tuple<int,string,double,string> labelInfo(const string& label, const int mode) {
     openDatabase();
 
     //mode: 0 -> search using label_id, 1 -> search using labelTitle, 2 -> search all labels
@@ -115,6 +115,7 @@ tuple<int,string,double> labelInfo(const string& label, const int mode) {
 
     double balance;
     int id;
+    string currency;
     string title;
 
     sqlite3_stmt *stmt;
@@ -130,19 +131,20 @@ tuple<int,string,double> labelInfo(const string& label, const int mode) {
             balance = sqlite3_column_double(stmt, 3);
             title = (const char*)sqlite3_column_text(stmt, 1);
             id = sqlite3_column_int(stmt, 0);
+            currency = (const char*)sqlite3_column_text(stmt, 2);
         } else {
             cout << "Label: " << (const char*)sqlite3_column_text(stmt, 1) << " -> ";
             cout << "Balance: " << sqlite3_column_double(stmt, 3) << " " << sqlite3_column_text(stmt,2) << endl;
         }
     }
     sqlite3_finalize(stmt);
-    return {id,title,balance};
+    return {id,title,balance,currency};
 }
 
 int deposit(double amount, char *label, const string& description) {
 
     string dateTime = currentDateTime();
-    auto [id,labelTitle, balance] = labelInfo(label, 1);
+    auto [id,labelTitle,balance,currency] = labelInfo(label, 1);
     double total = balance + amount;
 
     if (description.empty()) {
@@ -157,6 +159,7 @@ int deposit(double amount, char *label, const string& description) {
             string result2 = runQuery(query2);
 
             if (result2 == "Success") {
+                cout << "Deposit successful" << endl;
                 return 0;
             } else {
                 cout << "\nError: " << result2;
@@ -179,6 +182,7 @@ int deposit(double amount, char *label, const string& description) {
             string result2 = runQuery(query2);
 
             if (result2 == "Success") {
+                cout << "Deposit successful" << endl;
                 return 0;
             } else {
                 cout << "\nError: " << result2;
@@ -195,7 +199,7 @@ int deposit(double amount, char *label, const string& description) {
 int withdraw(double amount, char *label, const string& description) {
 
     string dateTime = currentDateTime();
-    auto [id,labelTitle, balance] = labelInfo(label, 1);
+    auto [id,labelTitle,balance,currency] = labelInfo(label, 1);
     double total = balance - amount;
 
     if (description.empty()) {
@@ -210,6 +214,7 @@ int withdraw(double amount, char *label, const string& description) {
             string result2 = runQuery(query2);
 
             if (result2 == "Success") {
+                cout << "Withdraw successful" << endl;
                 return 0;
             } else {
                 cout << "\nError: " << result2;
@@ -232,6 +237,7 @@ int withdraw(double amount, char *label, const string& description) {
             string result2 = runQuery(query2);
 
             if (result2 == "Success") {
+                cout << "Withdraw successful" << endl;
                 return 0;
             } else {
                 cout << "\nError: " << result2;
@@ -249,9 +255,15 @@ int newLabel(const string& labelTitle, const string& currency, double balance) {
 
     auto query = "INSERT INTO label (labelTitle, currency, balance) VALUES ('" + labelTitle + "', '" + currency + "', '" + to_string(balance) + "')";
 
-    runQuery(query);
+    auto result = runQuery(query);
 
-    return 0;
+    if (result == "Success") {
+        cout << "Label created successfully" << endl;
+        return 0;
+    } else {
+        cout << "\nError: " << result;
+        return 1;
+    }
 }
 
 int undo(){
@@ -279,7 +291,7 @@ int undo(){
         amount = sqlite3_column_double(stmt, 3);
     }
 
-    auto [id,labelTitle, balance] = labelInfo(to_string(labelID), 0);
+    auto [id,labelTitle,balance,currency] = labelInfo(to_string(labelID), 0);
 
     if (action == 0) { //Deposit
         query = "UPDATE label SET balance = " + to_string(balance - amount) + " WHERE id = " + to_string(labelID);
@@ -288,6 +300,7 @@ int undo(){
             auto query2 = "DELETE FROM transactions WHERE id = " + to_string(transactionID);
             string result2 = runQuery(query2);
             if (result2 == "Success") {
+                cout << "\nTransaction undone successfully.";
                 sqlite3_finalize(stmt);
                 return 0;
             } else {
@@ -305,6 +318,7 @@ int undo(){
             auto query2 = "DELETE FROM transactions WHERE id = " + to_string(transactionID);
             string result2 = runQuery(query2);
             if (result2 == "Success") {
+                cout << "\nTransaction undone successfully.";
                 sqlite3_finalize(stmt);
                 return 0;
             } else {
@@ -325,6 +339,7 @@ int rm(int mode, int id){
         auto query = "DELETE FROM label WHERE id = " + to_string(id);
         string result = runQuery(query);
         if (result == "Success") {
+            cout << "Deleted Label" << endl;
             return 0;
         } else {
             cout << "\nError: " << result;
@@ -334,6 +349,7 @@ int rm(int mode, int id){
         auto query = "DELETE FROM transactions WHERE id = " + to_string(id);
         string result = runQuery(query);
         if (result == "Success") {
+            cout << "Deleted Transaction" << endl;
             return 0;
         } else {
             cout << "\nError: " << result;
@@ -400,23 +416,6 @@ int ls(int mode, const string& labelTitle){
 
 }
 
-int printLabels(){
-    openDatabase();
-    string query = "SELECT * FROM label";
-    sqlite3_stmt *stmt;
-    rc = sqlite3_prepare_v2(db, query.c_str(), query.length(), &stmt, nullptr);
-    if (rc != SQLITE_OK) {
-        const char *errMsg;
-        errMsg = sqlite3_errmsg(db);
-        cout << errMsg << endl;
-        sqlite3_free(zErrMsg);
-    }
-    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
-        cout << "ID: " << sqlite3_column_int(stmt, 0) << " | " << sqlite3_column_text(stmt, 1) << " | Balance: " << sqlite3_column_double(stmt,3) << " " << sqlite3_column_text(stmt, 2) << endl;
-    }
-    sqlite3_finalize(stmt);
-}
-
 int main(int argc, char** argv) {
     // Command line budget calculator
 
@@ -427,7 +426,7 @@ int main(int argc, char** argv) {
     // [add] finman add 500 smbc -> adds value 500 to label smbc
         // Add description? (y/n)
     // [sub] finman sub 500 ufj -> subtracts value 500 from label ufj
-    // [new] finman new commbank USD 0 -> creates new label 'commbank' with initial balance of 0
+    // [new] finman new USD 0 -> creates new label with initial balance of 0
     // [bal1] finman bal ufj -> prints balance of label ufj with currency
     // [bal2] finman bal -> prints all balances
     // [labels] finman labels -> prints all labels
@@ -487,31 +486,58 @@ int main(int argc, char** argv) {
         } catch (const exception& e) {
             cout << "Error: " << e.what() << endl;
         }
-        cout << "sub" << endl;
     } else if (action == "new") {
-        newLabel(argv[2], argv[3], stod(argv[4]));
-    } else if (action == "undo") {
-        undo();
-    } else if (action == "bal" && argc == 3) {
-        auto [id, labelTitle, balance] = labelInfo(argv[2], 1);
-        cout << "Label: " << argv[2] << " -> Balance: " << balance;
-    } else if (action == "bal" && argc == 2) {
-        labelInfo("", 2);
-    } else if (action == "ls" && argc == 3) {
-        ls(1, argv[2]);
-    } else if (action == "ls" && argc == 2) {
-        ls(0, "");
-    } else if (action == "rm") {
-        string target = argv[2];
-        if (target == "label") {
-            rm(0,stoi(argv[3]));
-        } else if (target == "transaction") {
-            rm(1, stoi(argv[3]));
+        try {
+            newLabel(argv[2], argv[3], stod(argv[4]));
+        } catch (const exception& e) {
+            cout << "Error: " << e.what() << endl;
         }
+    } else if (action == "undo") {
+        try {
+            undo();
+        } catch (const exception& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    } else if (action == "bal" && argc == 3) {
+        try {
+            auto [id, labelTitle, balance, currency] = labelInfo(argv[2], 1);
+            cout << "Label: " << argv[2] << " -> Balance: " << balance << " " << currency;
+        } catch (const exception& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+
+    } else if (action == "bal" && argc == 2) {
+        try {
+            labelInfo("", 2);
+        } catch (const exception& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    } else if (action == "ls" && argc == 3) {
+        try {
+            ls(1, argv[2]);
+        } catch (const exception& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    } else if (action == "ls" && argc == 2) {
+        try {
+            ls(0, "");
+        } catch (const exception& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+    } else if (action == "rm") {
+        try {
+            string target = argv[2];
+            if (target == "label") {
+                rm(0,stoi(argv[3]));
+            } else if (target == "transaction") {
+                rm(1, stoi(argv[3]));
+            }
+        } catch (const exception& e) {
+            cout << "Error: " << e.what() << endl;
+        }
+
     } else if (action == "conv") {
 
-    } else if (action == "labels") {
-        printLabels();
     } else {
         cout << "Error: Invalid arguments" << endl;
     }

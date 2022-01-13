@@ -192,6 +192,59 @@ int deposit(double amount, char *label, const string& description) {
     }
 }
 
+int withdraw(double amount, char *label, const string& description) {
+
+    string dateTime = currentDateTime();
+    auto [id,labelTitle, balance] = labelInfo(label, 1);
+    double total = balance - amount;
+
+    if (description.empty()) {
+
+        auto query = "INSERT INTO transactions (label_id, action ,amount, totalAfter, datetime) VALUES (" + to_string(id) + ", 1 ," + to_string(amount) + ", " + to_string(total) + ", '" + dateTime + "')";
+
+        string result = runQuery(query);
+
+        if (result == "Success") {
+
+            auto query2 = "UPDATE label SET balance = " + to_string(total) + " WHERE id = " + to_string(id);
+            string result2 = runQuery(query2);
+
+            if (result2 == "Success") {
+                return 0;
+            } else {
+                cout << "\nError: " << result2;
+                return 1;
+            }
+        } else {
+            cout << "\nError: " << result;
+            return 1;
+        }
+
+    } else {
+
+        auto query = "INSERT INTO transactions (label_id, action ,amount, totalAfter, datetime, description) VALUES (" + to_string(id) + ", 1 ," + to_string(amount) + ", " + to_string(total) + ", '" + dateTime + "', '" + description + "')";
+
+        string result = runQuery(query);
+
+        if (result == "Success") {
+
+            auto query2 = "UPDATE label SET balance = " + to_string(total) + " WHERE id = " + to_string(id);
+            string result2 = runQuery(query2);
+
+            if (result2 == "Success") {
+                return 0;
+            } else {
+                cout << "\nError: " << result2;
+                return 1;
+            }
+
+        } else {
+            cout << "\nError: " << result;
+            return 1;
+        }
+    }
+}
+
 int newLabel(const string& labelTitle, const string& currency, double balance) {
 
     auto query = "INSERT INTO label (labelTitle, currency, balance) VALUES ('" + labelTitle + "', '" + currency + "', '" + to_string(balance) + "')";
@@ -310,6 +363,25 @@ int main(int argc, char** argv) {
             cout << "Error: " << e.what() << endl;
         }
     } else if (action == "sub") {
+        try {
+            string description;
+            char option = 0;
+            while (option != 'y' && option != 'n') {
+                cout << "Add description? (y/n): ";
+                cin >> option;
+            }
+            if (option == 'y') {
+                cout << "Enter Description: ";
+                cin.ignore(1, '\n');
+                getline(cin, description);
+                withdraw(stod(argv[2]), argv[3], description);
+            } else if (option == 'n') {
+                withdraw(stod(argv[2]), argv[3], description);
+            }
+
+        } catch (const exception& e) {
+            cout << "Error: " << e.what() << endl;
+        }
         cout << "sub" << endl;
     } else if (action == "new") {
         newLabel(argv[2], argv[3], stod(argv[4]));
@@ -320,7 +392,6 @@ int main(int argc, char** argv) {
         auto [id, labelTitle, balance] = labelInfo(argv[2], 1);
         cout << balance;
     } else if (action == "bal" && argc == 2) {
-        // Print all balances
         labelInfo("", 2);
     } else {
         cout << "Invalid action" << endl;

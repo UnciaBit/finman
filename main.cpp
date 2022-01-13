@@ -318,6 +318,65 @@ int undo(){
     }
 }
 
+int remove(){
+
+}
+
+int ls(int mode, const string& labelTitle){
+    // mode 0 -> list all labels, 1 -> list all transactions of a label
+
+    openDatabase();
+    string query;
+
+    if (mode == 0 && labelTitle.empty()){
+        query = "SELECT * FROM transactions INNER JOIN label ON transactions.label_id = label.id ";
+//        cout << query;
+    } else if (mode == 1 && !labelTitle.empty()){
+        query = "SELECT * FROM transactions INNER JOIN label ON transactions.label_id = label.id WHERE label.id = (SELECT id FROM label WHERE labelTitle = '" + labelTitle + "')";
+//        cout << query;
+    } else {
+        cout << "Error: Invalid arguments" << endl;
+        return 1;
+    }
+
+    sqlite3_stmt *stmt;
+    rc = sqlite3_prepare_v2(db, query.c_str(), query.length(), &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        const char *errMsg;
+        errMsg = sqlite3_errmsg(db);
+        cout << errMsg << endl;
+        sqlite3_free(zErrMsg);
+    }
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+
+
+        cout << "[" << sqlite3_column_int(stmt, 0) << "] ";
+
+        if (mode == 0){
+            cout << "| " << sqlite3_column_text(stmt,8) << " | ";
+        }
+
+        if(sqlite3_column_int(stmt, 2) == 0){
+            cout << "Deposit: ";
+        } else {
+            cout << "Withdraw: ";
+        }
+        cout << sqlite3_column_double(stmt, 3) << " (" << sqlite3_column_double(stmt,4 ) << ") | " << sqlite3_column_text(stmt, 5) << " | ";
+
+        if (sqlite3_column_text(stmt, 6) != nullptr){
+            cout << sqlite3_column_text(stmt, 6) << " |";
+        } else {
+            cout << "";
+        }
+
+        cout << endl;
+
+    }
+    sqlite3_finalize(stmt);
+
+
+}
+
 
 int main(int argc, char** argv) {
     // Command line budget calculator
@@ -334,6 +393,12 @@ int main(int argc, char** argv) {
     // [bal2] finman bal -> prints all balances
 
     // [undo] finman undo -> undo last transaction
+
+    // [rm] finman rm label ufj -> removes label ufj
+    // [rm] finman rm transaction 1 -> removes transaction 1
+
+    // [ls] finman ls -> lists all labels
+    // [ls] finman ls ufj -> lists all transactions for label ufj
 
     // [conv] finman conv 500 JPY USD -> converts 500 JPY to USD
     // [conv] finman conv ufj USD -> converts ufj balance to USD
@@ -385,16 +450,25 @@ int main(int argc, char** argv) {
         cout << "sub" << endl;
     } else if (action == "new") {
         newLabel(argv[2], argv[3], stod(argv[4]));
-        cout << "new" << endl;
     } else if (action == "undo") {
         undo();
     } else if (action == "bal" && argc == 3) {
         auto [id, labelTitle, balance] = labelInfo(argv[2], 1);
-        cout << balance;
+        cout << "Label: " << argv[2] << " -> Balance: " << balance;
     } else if (action == "bal" && argc == 2) {
         labelInfo("", 2);
+    } else if (action == "ls" && argc == 3) {
+        ls(1, argv[2]);
+    } else if (action == "ls" && argc == 2) {
+        ls(0, "");
+    } else if (action == "rm" && argc == 3) {
+//        remove(argv[2]);
+    } else if (action == "rm" && argc == 4) {
+//        remove(argv[2], stoi(argv[3]));
+    } else if (action == "conv") {
+
     } else {
-        cout << "Invalid action" << endl;
+        cout << "Error: Invalid arguments" << endl;
     }
 
 

@@ -334,7 +334,6 @@ int undo(){
 
 int rm(int mode, int id){
     // mode = 0 -> label, mode = 1 -> transaction
-    cout << "mode" << mode << "id" << id << endl;
     if (mode == 0){
         auto query = "DELETE FROM label WHERE id = " + to_string(id);
         string result = runQuery(query);
@@ -417,11 +416,6 @@ int ls(int mode, const string& labelTitle){
 }
 
 int main(int argc, char** argv) {
-    // Command line budget calculator
-
-    // finman <add|sub|new|undo> <number> <label>
-
-    // finman new <label> <currency>
 
     // [add] finman add 500 smbc -> adds value 500 to label smbc
         // Add description? (y/n)

@@ -133,7 +133,7 @@ tuple<int,string,double,string> labelInfo(const string& label, const int mode) {
             id = sqlite3_column_int(stmt, 0);
             currency = (const char*)sqlite3_column_text(stmt, 2);
         } else {
-            cout << "Label: " << (const char*)sqlite3_column_text(stmt, 1) << " -> ";
+            cout << "["  << sqlite3_column_int(stmt,0) <<  "] " << (const char*)sqlite3_column_text(stmt, 1) << " -> ";
             cout << "Balance: " << sqlite3_column_double(stmt, 3) << " " << sqlite3_column_text(stmt,2) << endl;
         }
     }
@@ -159,7 +159,7 @@ int deposit(double amount, char *label, const string& description) {
             string result2 = runQuery(query2);
 
             if (result2 == "Success") {
-                cout << "Deposit successful" << endl;
+                cout << "\nDeposit successful" << endl;
                 return 0;
             } else {
                 cout << "\nError: " << result2;
@@ -182,7 +182,7 @@ int deposit(double amount, char *label, const string& description) {
             string result2 = runQuery(query2);
 
             if (result2 == "Success") {
-                cout << "Deposit successful" << endl;
+                cout << "\nDeposit successful" << endl;
                 return 0;
             } else {
                 cout << "\nError: " << result2;
@@ -214,7 +214,7 @@ int withdraw(double amount, char *label, const string& description) {
             string result2 = runQuery(query2);
 
             if (result2 == "Success") {
-                cout << "Withdraw successful" << endl;
+                cout << "\nWithdraw successful" << endl;
                 return 0;
             } else {
                 cout << "\nError: " << result2;
@@ -237,7 +237,7 @@ int withdraw(double amount, char *label, const string& description) {
             string result2 = runQuery(query2);
 
             if (result2 == "Success") {
-                cout << "Withdraw successful" << endl;
+                cout << "\nWithdraw successful" << endl;
                 return 0;
             } else {
                 cout << "\nError: " << result2;

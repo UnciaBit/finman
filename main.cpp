@@ -417,25 +417,6 @@ int ls(int mode, const string& labelTitle){
 
 int main(int argc, char** argv) {
 
-    // [add] finman add 500 smbc -> adds value 500 to label smbc
-        // Add description? (y/n)
-    // [sub] finman sub 500 ufj -> subtracts value 500 from label ufj
-    // [new] finman new USD 0 -> creates new label with initial balance of 0
-    // [bal1] finman bal ufj -> prints balance of label ufj with currency
-    // [bal2] finman bal -> prints all balances
-    // [labels] finman labels -> prints all labels
-
-    // [undo] finman undo -> undo last transaction
-
-    // [rm] finman rm label ufj -> removes label ufj
-    // [rm] finman rm transaction 1 -> removes transaction 1
-
-    // [ls] finman ls -> lists all labels
-    // [ls] finman ls ufj -> lists all transactions for label ufj
-
-    // [conv] finman conv 500 JPY USD -> converts 500 JPY to USD
-    // [conv] finman conv ufj USD -> converts ufj balance to USD
-
     createTable();
 
     string action = argv[1];

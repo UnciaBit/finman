@@ -320,7 +320,29 @@ int undo(){
 
 int rm(int mode, int id){
     // mode = 0 -> label, mode = 1 -> transaction
-
+    cout << "mode" << mode << "id" << id << endl;
+    if (mode == 0){
+        auto query = "DELETE FROM label WHERE id = " + to_string(id);
+        string result = runQuery(query);
+        if (result == "Success") {
+            return 0;
+        } else {
+            cout << "\nError: " << result;
+            return 1;
+        }
+    } else if (mode == 1) {
+        auto query = "DELETE FROM transactions WHERE id = " + to_string(id);
+        string result = runQuery(query);
+        if (result == "Success") {
+            return 0;
+        } else {
+            cout << "\nError: " << result;
+            return 1;
+        }
+    } else{
+        cout << "\nError: Invalid mode";
+        return 1;
+    }
 }
 
 int ls(int mode, const string& labelTitle){
@@ -479,10 +501,13 @@ int main(int argc, char** argv) {
         ls(1, argv[2]);
     } else if (action == "ls" && argc == 2) {
         ls(0, "");
-    } else if (action == "rm" && argc == 3) {
-//        remove(argv[2]);
-    } else if (action == "rm" && argc == 4) {
-//        remove(argv[2], stoi(argv[3]));
+    } else if (action == "rm") {
+        string target = argv[2];
+        if (target == "label") {
+            rm(0,stoi(argv[3]));
+        } else if (target == "transaction") {
+            rm(1, stoi(argv[3]));
+        }
     } else if (action == "conv") {
 
     } else if (action == "labels") {
@@ -490,7 +515,6 @@ int main(int argc, char** argv) {
     } else {
         cout << "Error: Invalid arguments" << endl;
     }
-
 
     return 0;
 }
